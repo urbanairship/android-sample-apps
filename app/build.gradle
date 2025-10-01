@@ -1,0 +1,74 @@
+plugins {
+    id 'kotlin-android'
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.compose.compiler)
+}
+
+android {
+    namespace 'com.airship.sample'
+    compileSdk = 36
+
+    defaultConfig {
+        applicationId "com.airship.sample"
+        minSdk 24
+        targetSdk 36
+        versionCode 1
+        versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        viewBinding = true
+        buildConfig true
+        compose = true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_11
+    }
+}
+
+dependencies {
+    // Kotlin
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.serialization.json)
+
+    //Support
+    implementation(libs.google.material)
+
+    //Airship
+    implementation(libs.airship.fcm)
+    implementation(libs.airship.messagecenter)
+    implementation(libs.airship.preferencecenter)
+    implementation(libs.airship.liveupdate)
+    implementation(libs.airship.automation)
+//    implementation(libs.airship.debug)
+
+    // AndroidX
+    implementation(libs.androidx.navigation.fragmentktx)
+    implementation(libs.androidx.navigation.ui)
+    implementation(libs.androidx.preference)
+
+    // Glance
+    implementation(libs.glance.appwidget)
+}
+
+def googleServicesFile = rootProject.file('sample/google-services.json')
+if (googleServicesFile.exists()) {
+    apply plugin: 'com.google.gms.google-services'  // Google Play services Gradle plugin
+}
