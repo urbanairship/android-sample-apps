@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         add(R.id.inbox);
         add(R.id.pref_center);
         add(R.id.settings);
-        add(R.id.debugFragment);
+//        add(R.id.debugFragment); //TODO: uncomment when debug is public
     }};
 
     public static final AppBarConfiguration APP_BAR_CONFIGURATION =
