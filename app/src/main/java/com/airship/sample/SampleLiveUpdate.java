@@ -67,8 +67,7 @@ public class SampleLiveUpdate implements CallbackLiveUpdateNotificationHandler {
                                      .addCategory(update.getName())
                                      .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP)
                                      .setPackage(null);
-
-        PendingIntent contentIntent = PendingIntentCompat.getActivity(
+        PendingIntent contentIntent = PendingIntent.getActivity(
                 context, 0, launchIntent, PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder builder =

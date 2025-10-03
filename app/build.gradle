@@ -44,12 +44,7 @@ android {
 
 dependencies {
     // Kotlin
-    implementation(libs.kotlinx.coroutines.android)
-    implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.serialization.json)
-
-    //Support
-    implementation(libs.google.material)
 
     //Airship
     implementation(libs.airship.fcm)
@@ -60,9 +55,19 @@ dependencies {
 //    implementation(libs.airship.debug)
 
     // AndroidX
-    implementation(libs.androidx.navigation.fragmentktx)
-    implementation(libs.androidx.navigation.ui)
-    implementation(libs.androidx.preference)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+    // Compose
+    implementation(platform(libs.compose.bom))
+    implementation(libs.compose.ui)
+    implementation(libs.compose.material3)
+    implementation(libs.compose.ui.viewbinding)
+    implementation(libs.compose.ui.tooling)
 
     // Glance
     implementation(libs.glance.appwidget)

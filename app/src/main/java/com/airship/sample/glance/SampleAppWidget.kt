@@ -43,8 +43,8 @@ import com.airship.sample.R
 import com.airship.sample.glance.SampleAppWidget.Payload.CountryMedals
 import java.io.File
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import kotlinx.serialization.json.Json
-import kotlin.text.get
 
 /**
  * A sample app widget that displays medal counts for a list of countries.
@@ -201,7 +201,6 @@ internal class SampleAppWidget : GlanceAppWidget() {
      *  ]
      * }
      */
-    @OptIn(kotlinx.serialization.InternalSerializationApi::class)
     @Serializable
     data class Payload(
         val countries: List<CountryMedals>
