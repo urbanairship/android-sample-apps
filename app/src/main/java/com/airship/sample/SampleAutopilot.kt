@@ -75,9 +75,6 @@ class SampleAutopilot : Autopilot() {
         }
 
         airship.channel.addChannelListener(airshipListener)
-
-        // Register the "squareview" InApp Message Content Extender
-        SampleInAppMessageContentExtender.register()
     }
 
     override fun createAirshipConfigOptions(context: Context): AirshipConfigOptions? {
