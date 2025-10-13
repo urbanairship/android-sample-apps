@@ -2,5 +2,5 @@
 <full-backup-content>
     <exclude
         domain="sharedpref"
-        path="com.urbanairship.sample.no_backup" />
+        path="com.airship.sample.no_backup" />
 </full-backup-content>

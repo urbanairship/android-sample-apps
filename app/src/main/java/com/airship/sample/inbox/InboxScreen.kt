@@ -13,7 +13,7 @@ import com.airship.sample.databinding.FragmentInboxBinding
 
 @Composable
 fun InboxScreen(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     messageId: String? = null,
     onMessageSelected: (String?) -> Unit
 ) {

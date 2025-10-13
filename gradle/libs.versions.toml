@@ -6,6 +6,7 @@ airship = "19.13.3"
 androidx-activity-compose = '1.10.1'
 androidx-lifecycle = '2.9.1'
 androidx-appcompat = '1.7.1'
+androidx-core = '1.17.0'
 
 # Compose
 compose-bom = '2025.06.01'
@@ -18,7 +19,9 @@ kotlin = "2.0.21"
 kotlinx-serialization = '1.6.3'
 
 # Navigation3
-nav3Core = "1.0.0-alpha01"
+nav3Core = "1.0.0-alpha10"
+lifecycleViewmodelNav3 = "1.0.0-alpha04"
+fragmentCompose = "1.8.9"
 
 [libraries]
 # Airship
@@ -33,9 +36,10 @@ airship-debug = { module = "com.urbanairship.android:urbanairship-debug", versio
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 androidx-navigation3-runtime = { module = "androidx.navigation3:navigation3-runtime", version.ref = "nav3Core" }
 androidx-navigation3-ui = { module = "androidx.navigation3:navigation3-ui", version.ref = "nav3Core" }
-androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "nav3Core" }
+androidx-lifecycle-viewmodel-navigation3 = { module = "androidx.lifecycle:lifecycle-viewmodel-navigation3", version.ref = "lifecycleViewmodelNav3" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity-compose" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref="androidx-lifecycle" }
+androidx-core = { module = "androidx.core:core", version.ref = "androidx-core" }
 
 # Compose
 compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }

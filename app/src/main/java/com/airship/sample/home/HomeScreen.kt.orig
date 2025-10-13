@@ -37,6 +37,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+<<<<<<< HEAD
+=======
+import androidx.navigation3.runtime.NavKey
+>>>>>>> 39e0ab9b7 (updated app router)
 import com.airship.sample.AppRouterViewModel
 import com.airship.sample.Destination
 import com.urbanairship.messagecenter.Message
@@ -51,7 +55,11 @@ import kotlinx.coroutines.flow.flowOf
 @Composable
 internal fun HomeScreen(
     onNavigate: (Destination) -> Unit,
+<<<<<<< HEAD
     viewModel: HomeViewModel = viewModel<DefaultHomeViewModel>()
+=======
+    viewModel: HomeViewModel = viewModel<HomeViewModel>()
+>>>>>>> 39e0ab9b7 (updated app router)
 ) {
 
     val snackbarHostState = remember { SnackbarHostState() }
@@ -114,6 +122,20 @@ internal fun HomeScreen(
                         title = stringResource(R.string.named_user),
                         subtitle = namedUserId ?: "Not Set",
                         onClick = { onNavigate(QuickAccess.NamedUserScreen) }
+                    )
+                    HorizontalDivider()
+
+                    QuickSettingItem(
+                        title = stringResource(R.string.start_live_activity),
+                        subtitle = "Not implemented",
+                        onClick = {}
+                    )
+                    HorizontalDivider()
+
+                    QuickSettingItem(
+                        title = stringResource(R.string.thomas_layouts),
+                        subtitle = "Not implemented",
+                        onClick = {}
                     )
                     HorizontalDivider()
 
@@ -186,8 +208,13 @@ private fun HomeScreenPreview() {
         override val namedUserId: StateFlow<String?> = MutableStateFlow("user id")
         override val isOptedInForPushes: StateFlow<Boolean> = MutableStateFlow(false)
         override var unreadMessageCount: Flow<List<Message>> = flowOf(emptyList())
+<<<<<<< HEAD
         override fun copyToClipboard(context: android.content.Context) { }
         override fun togglePushStatus() { }
+=======
+        override fun copyToClipboard(context: android.content.Context) {
+        }
+>>>>>>> 39e0ab9b7 (updated app router)
     }
 
     HomeScreen(

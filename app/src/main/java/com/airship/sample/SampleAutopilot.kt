@@ -2,15 +2,24 @@
 package com.airship.sample
 
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
+import android.content.Intent
+import androidx.core.app.NotificationChannelCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.net.toUri
 import com.urbanairship.AirshipConfigOptions
 import com.urbanairship.Autopilot
 //import com.urbanairship.Airship
+import com.urbanairship.liveupdate.LiveUpdateManager
+import com.urbanairship.messagecenter.MessageCenter
+import com.airship.sample.glance.SampleAppWidgetLiveUpdate
 
 /**
  * Autopilot that enables user notifications on first run.
  */
 class SampleAutopilot : Autopilot() {
-//TODO: uncomment with airship v20
+
+    //TODO: revise when airship v20 is out
 //    override fun onAirshipReady(airship: Airship) {
 //        val context = Airship.applicationContext
 //
@@ -34,11 +43,21 @@ class SampleAutopilot : Autopilot() {
 //
 //        NotificationManagerCompat.from(context).createNotificationChannel(sportsChannel)
 //
+//        val deliveryChannel =
+//            NotificationChannelCompat.Builder("delivery", NotificationManagerCompat.IMPORTANCE_HIGH)
+//                .setDescription("Delivery updates!")
+//                .setName("Delivery")
+//                .setVibrationEnabled(false)
+//                .build()
+//
+//        NotificationManagerCompat.from(context).createNotificationChannel(deliveryChannel)
+//
 //        // Register handlers for Live Updates.
 //        with(LiveUpdateManager.shared()) {
 //            register("sports", SampleLiveUpdate())
 //            register("sports-async", SampleAsyncLiveUpdate())
 //            register("medals-widget", SampleAppWidgetLiveUpdate())
+//            register("delivery", SampleDeliveryLiveUpdate())
 //        }
 //
 //        MessageCenter.shared().setOnShowMessageCenterListener { messageId: String? ->
@@ -66,9 +85,12 @@ class SampleAutopilot : Autopilot() {
 //        }
 //
 //        airship.channel.addChannelListener(airshipListener)
+//
+//        // Register the "squareview" InApp Message Content Extender
+//        SampleInAppMessageContentExtender.register()
 //    }
 
-    override fun createAirshipConfigOptions(context: Context): AirshipConfigOptions? {
+//    override fun createAirshipConfigOptions(context: Context): AirshipConfigOptions? {
         /*
           Optionally, customize your config at runtime:
 
@@ -86,11 +108,11 @@ class SampleAutopilot : Autopilot() {
          */
 
         // defaults to loading config from airshipconfig.properties file
-        return super.createAirshipConfigOptions(context)
-    }
+//        return super.createAirshipConfigOptions(context)
+//    }
 
-    companion object {
-        private const val NO_BACKUP_PREFERENCES = "com.urbanairship.sample.no_backup"
-        private const val FIRST_RUN_KEY = "first_run"
-    }
+//    companion object {
+//        private const val NO_BACKUP_PREFERENCES = "com.airship.sample.no_backup"
+//        private const val FIRST_RUN_KEY = "first_run"
+//    }
 }

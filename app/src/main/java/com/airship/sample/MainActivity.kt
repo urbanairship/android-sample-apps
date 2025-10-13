@@ -1,10 +1,13 @@
 package com.airship.sample
 
 import android.content.Intent
+import android.content.pm.ApplicationInfo
 import android.os.Bundle
+import android.webkit.WebView
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -17,163 +20,86 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
-import androidx.navigation3.runtime.NavEntry
-import androidx.navigation3.runtime.NavKey
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
+import androidx.navigation3.runtime.rememberSavedStateNavEntryDecorator
+import androidx.navigation3.scene.rememberSceneSetupNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.urbanairship.android.layout.AirshipCustomViewManager
 import com.urbanairship.google.PlayServicesUtils.handleAnyPlayServicesError
 import com.urbanairship.google.PlayServicesUtils.isGooglePlayStoreAvailable
-import com.airship.sample.debug.DebugScreen
-import com.airship.sample.home.HomeScreen
-import com.airship.sample.inbox.InboxScreen
-import com.airship.sample.preferencecenter.PreferenceCenterScreen
 import AirshipTheme
-import kotlinx.serialization.Serializable
-
 /**
  * Main application entry point.
  */
 class MainActivity : AppCompatActivity() {
-
-    @Serializable
-    data object Home : NavKey, BottomNavItem {
-        override val icon: ImageVector = Icons.Filled.Home
-        override val label: String = "Home"
-    }
-
-    @Serializable
-    data object Message : NavKey, BottomNavItem {
-        override val icon: ImageVector = Icons.Filled.MailOutline
-        override val label: String = "Messages"
-    }
-
-    @Serializable
-    data object PreferenceCenter : NavKey, BottomNavItem {
-        override val icon: ImageVector = Icons.Filled.Notifications
-        override val label: String = "Preference"
-    }
-
-    @Serializable
-    data object Settings : NavKey, BottomNavItem {
-        override val icon: ImageVector = Icons.Filled.Settings
-        override val label: String = "Settings"
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         this.enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         setContent {
-            val context = LocalContext.current
-            val navItems = listOf(MainActivity.Home, Message, PreferenceCenter,
-                MainActivity.Settings)
-            val topLevelBackStack = remember { TopLevelBackStack<NavKey>(Home) }
+            val appRouter: AppRouterViewModel = viewModel(
+                modelClass = AppRouterViewModel::class.java,
+                factory = AppRouterViewModel.factory()
+            )
+
+            val activeTab = appRouter.selectedTopLevel.collectAsState().value
+            val backstack = appRouter.activeBackStack.collectAsState().value
 
             AirshipTheme {
                 Scaffold(
                     bottomBar = {
                         NavigationBar {
-                            navItems.forEach { item ->
-                                val selected = topLevelBackStack.topLevelKey == item
+                            AppRouterViewModel.TopLevelDestination.entries.forEach { item ->
+                                val selected = activeTab == item
+
                                 NavigationBarItem(
                                     selected = selected,
-                                    onClick = { topLevelBackStack.switchTopLevel(item) },
-                                    label = { Text(text = item.label) },
+                                    onClick = { appRouter.navigate(item) },
+                                    label = { Text(text = item.title()) },
                                     alwaysShowLabel = false,
                                     icon = {
                                         Icon(
-                                            imageVector = item.icon,
-                                            contentDescription = item.label
+                                            imageVector = item.icon(),
+                                            contentDescription = item.title()
                                         )
                                     }
                                 )
+
                             }
                         }
                     },
                 ) { innerPadding ->
-                    val screenModifier = Modifier
-                        .padding(bottom = innerPadding.calculateBottomPadding())
-                        .fillMaxSize()
+                    Box(
+                        modifier = Modifier
+                            .padding(bottom = innerPadding.calculateBottomPadding())
+                            .fillMaxSize()
+                    ) {
                         NavDisplay(
-                            backStack = topLevelBackStack.backStack,
-                            onBack = { topLevelBackStack.removeLast() },
+                            backStack = backstack,
+                            onBack = { appRouter.pop() },
+                            entryDecorators = listOf(
+                                // Add the default decorators for managing scenes and saving state
+                                rememberSceneSetupNavEntryDecorator(),
+                                rememberSavedStateNavEntryDecorator(),
+                                // Then add the view model store decorator
+                                rememberViewModelStoreNavEntryDecorator()
+                            ),
                             entryProvider = { key ->
-                                when (key) {
-                                    is Home -> NavEntry(key) {
-                                        HomeScreen(backStack = topLevelBackStack, modifier = screenModifier)
-                                    }
-                                    is Message -> NavEntry(key) {
-                                        InboxScreen(modifier = screenModifier, onMessageSelected = {})
-                                    }
-                                    is PreferenceCenter -> NavEntry(key) {
-                                        PreferenceCenterScreen(modifier = screenModifier, context = context)
-                                    }
-                                    is Settings -> NavEntry(key) {
-                                        DebugScreen(modifier = screenModifier)
-                                    }
-                                    else -> {
-                                        error("Unknown route: $key")
-                                    }
-                                }
+                                appRouter.navigationEntry(key)
                             })
+                    }
+
                 }
             }
         }
-    }
 
-    interface BottomNavItem {
-        val label: String
-        val icon: ImageVector
-    }
-
-    open class TopLevelBackStack<T : NavKey>(private val startKey: T) {
-
-        internal var topLevelBackStacks: HashMap<T, SnapshotStateList<T>> = hashMapOf(
-            startKey to mutableStateListOf(startKey)
-        )
-
-        var topLevelKey by mutableStateOf(startKey)
-            private set
-
-        val backStack = mutableStateListOf<T>(startKey)
-
-        private fun updateBackStack() {
-            backStack.clear()
-            val currentStack = topLevelBackStacks[topLevelKey] ?: emptyList()
-
-            if (topLevelKey == startKey) {
-                backStack.addAll(currentStack)
-            } else {
-                val startStack = topLevelBackStacks[startKey] ?: emptyList()
-                backStack.addAll(startStack + currentStack)
-            }
-        }
-
-        internal open fun switchTopLevel(key: T) {
-            if (topLevelBackStacks[key] == null) {
-                topLevelBackStacks[key] = mutableStateListOf(key)
-            }
-            topLevelKey = key
-            updateBackStack()
-        }
-
-        fun removeLast() {
-            val currentStack = topLevelBackStacks[topLevelKey] ?: return
-
-            if (currentStack.size > 1) {
-                currentStack.removeLastOrNull()
-            } else if (topLevelKey != startKey) {
-                topLevelKey = startKey
-            }
-            updateBackStack()
+        // Enable webview debugging via Chrome for debug builds.
+        if (0 != applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) {
+            WebView.setWebContentsDebuggingEnabled(true)
         }
     }
 
@@ -200,5 +126,23 @@ class MainActivity : AppCompatActivity() {
 
     public override fun onPause() {
         super.onPause()
+    }
+
+    fun AppRouterViewModel.TopLevelDestination.title(): String {
+        return when(this) {
+            AppRouterViewModel.TopLevelDestination.HOME -> "Home"
+            AppRouterViewModel.TopLevelDestination.MESSAGE -> "Messages"
+            AppRouterViewModel.TopLevelDestination.PREFERENCE_CENTER -> "Preferences"
+            AppRouterViewModel.TopLevelDestination.SETTINGS -> "Settings"
+        }
+    }
+
+    fun AppRouterViewModel.TopLevelDestination.icon(): ImageVector {
+        return when(this) {
+            AppRouterViewModel.TopLevelDestination.HOME -> Icons.Filled.Home
+            AppRouterViewModel.TopLevelDestination.MESSAGE -> Icons.Filled.MailOutline
+            AppRouterViewModel.TopLevelDestination.PREFERENCE_CENTER -> Icons.Filled.Notifications
+            AppRouterViewModel.TopLevelDestination.SETTINGS -> Icons.Filled.Settings
+        }
     }
 }

@@ -6,17 +6,17 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-
+import androidx.compose.ui.viewinterop.AndroidViewBinding
 //import com.urbanairship.debug.DebugFragment
-//import com.airship.sample.databinding.FragmentDebugBinding
+import com.airship.sample.databinding.FragmentDebugBinding
 
 @Composable
 fun DebugScreen(
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     Scaffold(modifier = modifier) { paddingValues ->
         Surface(Modifier.padding(paddingValues)) {
-            Text("Will be added in v20")
+            Text("Under construction. Will be added in airship v20")
 //            AndroidViewBinding(FragmentDebugBinding::inflate) {
 //                val fragment = debugFragmentContainerView.getFragment<DebugFragment>()
 //            }

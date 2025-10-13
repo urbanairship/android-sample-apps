@@ -11,13 +11,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidViewBinding
 import androidx.fragment.app.FragmentActivity
+import androidx.glance.LocalContext
 import com.urbanairship.preferencecenter.ui.PreferenceCenterFragment
 import com.airship.sample.R
 import com.airship.sample.databinding.FragmentPreferenceCenterBinding
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PreferenceCenterScreen(modifier: Modifier, context: Context) {
+fun PreferenceCenterScreen(
+    modifier: Modifier = Modifier,
+    context: Context
+) {
     Scaffold(topBar = {
         TopAppBar(
             title = {
