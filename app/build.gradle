@@ -47,11 +47,11 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     //Airship
-    implementation(libs.airship.fcm)
-    implementation(libs.airship.messagecenter)
-    implementation(libs.airship.preferencecenter)
-    implementation(libs.airship.liveupdate)
-    implementation(libs.airship.automation)
+    debugImplementation(libs.airship.fcm)
+    debugImplementation(libs.airship.messagecenter)
+    debugImplementation(libs.airship.preferencecenter)
+    debugImplementation(libs.airship.liveupdate)
+    debugImplementation(libs.airship.automation)
 //    implementation(libs.airship.debug)
 
     // AndroidX
