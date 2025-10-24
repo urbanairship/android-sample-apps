@@ -9,6 +9,12 @@ import android.os.Looper;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import androidx.annotation.MainThread;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
+import androidx.core.app.NotificationCompat;
+
 import com.bumptech.glide.Glide;
 import com.urbanairship.json.JsonMap;
 import com.urbanairship.liveupdate.CallbackLiveUpdateNotificationHandler;
@@ -18,12 +24,6 @@ import com.urbanairship.liveupdate.LiveUpdateEvent;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import androidx.annotation.MainThread;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.WorkerThread;
-import androidx.core.app.NotificationCompat;
 
 /**
  * Sample sports live update handler, with support for asynchronously fetching team images during

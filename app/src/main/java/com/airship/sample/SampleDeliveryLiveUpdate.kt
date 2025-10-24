@@ -12,6 +12,7 @@ import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.graphics.drawable.IconCompat
+import com.bumptech.glide.Glide
 import com.urbanairship.UALog
 import com.urbanairship.json.JsonException
 import com.urbanairship.json.JsonMap
@@ -21,7 +22,6 @@ import com.urbanairship.liveupdate.LiveUpdate
 import com.urbanairship.liveupdate.LiveUpdateEvent
 import com.urbanairship.util.PendingIntentCompat
 import java.util.Date
-import com.bumptech.glide.Glide
 
 class SampleDeliveryLiveUpdate : CallbackLiveUpdateNotificationHandler {
 

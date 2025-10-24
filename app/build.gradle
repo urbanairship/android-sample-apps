@@ -33,12 +33,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11
+        jvmTarget = JavaVersion.VERSION_17
     }
 }
 
@@ -47,12 +47,15 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     //Airship
-    debugImplementation(libs.airship.fcm)
-    debugImplementation(libs.airship.messagecenter)
-    debugImplementation(libs.airship.preferencecenter)
-    debugImplementation(libs.airship.liveupdate)
-    debugImplementation(libs.airship.automation)
-//    implementation(libs.airship.debug)
+    implementation(libs.airship.fcm)
+    implementation(libs.airship.automation.compose)
+    implementation(libs.airship.messagecenter.compose)
+    implementation(libs.airship.preferencecenter.compose)
+    implementation(libs.airship.liveupdate)
+    // Included as an implementation dependency so that we can embed the debug screen as a tab
+    // in our sample app. Apps that do not wish to embed the debug screen can omit this dependency
+    // or use debugImplementation instead.
+    implementation(libs.airship.debug)
 
     // AndroidX
     implementation(libs.androidx.core)
@@ -74,7 +77,7 @@ dependencies {
     implementation(libs.glance.appwidget)
 }
 
-def googleServicesFile = rootProject.file('sample/google-services.json')
+def googleServicesFile = rootProject.file('app/google-services.json')
 if (googleServicesFile.exists()) {
     apply plugin: 'com.google.gms.google-services'  // Google Play services Gradle plugin
 }

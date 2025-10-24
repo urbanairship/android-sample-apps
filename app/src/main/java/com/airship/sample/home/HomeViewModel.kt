@@ -7,8 +7,7 @@ import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.urbanairship.UAirship
-import com.urbanairship.Cancelable
+import com.urbanairship.Airship
 import com.urbanairship.PrivacyManager
 import com.urbanairship.messagecenter.Message
 import com.urbanairship.messagecenter.MessageCenter
@@ -39,21 +38,21 @@ internal class DefaultHomeViewModel() : HomeViewModel, ViewModel() {
     override val isOptedInForPushes: StateFlow<Boolean> = _notificationStatus.asStateFlow()
 
     init {
-        UAirship.shared { instance ->
-            _notificationStatus.update { instance.pushManager.isOptIn }
+        Airship.onReady {
+            _notificationStatus.update { push.isOptIn }
 
             viewModelScope.launch {
-                instance.pushManager.pushNotificationStatusFlow.collect { status ->
+                push.pushNotificationStatusFlow.collect { status ->
                     _notificationStatus.update { status.isOptIn }
                 }
             }
         }
     }
     override val channelId: StateFlow<String?>
-        get() = UAirship.shared().channel.channelIdFlow
+        get() = Airship.channel.channelIdFlow
 
     override val namedUserId: StateFlow<String?>
-        get() = UAirship.shared().contact.namedUserIdFlow
+        get() = Airship.contact.namedUserIdFlow
 
     override val unreadMessageCount: Flow<List<Message>>
         get() = MessageCenter.shared().inbox.getUnreadMessagesFlow()
@@ -70,11 +69,10 @@ internal class DefaultHomeViewModel() : HomeViewModel, ViewModel() {
 
         when(newValue) {
             true -> {
-                UAirship.shared().privacyManager.enable(PrivacyManager.Feature.PUSH)
-                UAirship.shared().pushManager.enableUserNotifications(PermissionPromptFallback.SystemSettings) {}
+                Airship.privacyManager.enable(PrivacyManager.Feature.PUSH)
+                Airship.push.enableUserNotifications(PermissionPromptFallback.SystemSettings) {}
             }
-            false -> UAirship.shared().pushManager.userNotificationsEnabled = false
+            false -> Airship.push.userNotificationsEnabled = false
         }
     }
-
 }

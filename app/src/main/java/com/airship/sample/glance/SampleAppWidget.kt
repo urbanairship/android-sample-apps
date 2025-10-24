@@ -37,14 +37,14 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
-import com.urbanairship.UALog
 import com.airship.sample.MainActivity
 import com.airship.sample.R
 import com.airship.sample.glance.SampleAppWidget.Payload.CountryMedals
-import java.io.File
+import com.urbanairship.UALog
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 import kotlinx.serialization.json.Json
+import java.io.File
 
 /**
  * A sample app widget that displays medal counts for a list of countries.

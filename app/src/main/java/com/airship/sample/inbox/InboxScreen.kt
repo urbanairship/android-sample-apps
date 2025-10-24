@@ -1,45 +1,40 @@
 package com.airship.sample.inbox
 
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.viewinterop.AndroidViewBinding
-import com.urbanairship.messagecenter.Message
-import com.urbanairship.messagecenter.ui.MessageCenterFragment
-import com.urbanairship.messagecenter.ui.view.MessageViewState
-import com.airship.sample.databinding.FragmentInboxBinding
+import com.urbanairship.messagecenter.compose.ui.MessageCenterScreen
+import com.urbanairship.messagecenter.compose.ui.MessageCenterState
+import com.urbanairship.messagecenter.compose.ui.rememberMessageCenterState
+import com.urbanairship.messagecenter.compose.ui.theme.MessageCenterColors
+import com.urbanairship.messagecenter.compose.ui.theme.MessageCenterTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun InboxScreen(
-    modifier: Modifier = Modifier,
-    messageId: String? = null,
-    onMessageSelected: (String?) -> Unit
+    state: MessageCenterState = rememberMessageCenterState(),
 ) {
-    Scaffold(modifier = modifier) { paddingValues ->
-        Surface(Modifier.padding(paddingValues)) {
-            AndroidViewBinding(FragmentInboxBinding::inflate) {
-                val fragment = fragmentContainerView.getFragment<MessageCenterFragment>()
 
-                // Show the message pane if we have a message ID to display
-                messageId?.let { fragment.showMessage(it) }
+    val lightColors = MessageCenterColors.lightDefaults(
+        background = MaterialTheme.colorScheme.surfaceContainer,
+        surface = MaterialTheme.colorScheme.surface,
+        accent = MaterialTheme.colorScheme.primary,
+        divider = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
+        error = MaterialTheme.colorScheme.error
+    )
 
-                fragment.listener = object : MessageCenterFragment.Listener {
-                    override fun onShowMessage(message: Message): Boolean {
-                        onMessageSelected(message.id)
-                        return false
-                    }
+    val darkColors = MessageCenterColors.darkDefaults(
+        background = MaterialTheme.colorScheme.surfaceContainer,
+        surface = MaterialTheme.colorScheme.surface,
+        accent = MaterialTheme.colorScheme.primary,
+        divider = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
+        error = MaterialTheme.colorScheme.error
+    )
 
-                    override fun onCloseMessage() {
-                        onMessageSelected(null)
-                    }
-
-                    override fun onListEditModeChanged(isEditing: Boolean) = Unit
-                    override fun onMessageLoaded(message: Message) = Unit
-                    override fun onMessageLoadError(error: MessageViewState.Error.Type) = Unit
-                }
-            }
-        }
+    MessageCenterTheme(
+        colors = if (isSystemInDarkTheme()) darkColors else lightColors
+    ) {
+        MessageCenterScreen(state = state)
     }
 }

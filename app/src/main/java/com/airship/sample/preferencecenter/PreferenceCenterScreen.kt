@@ -1,44 +1,43 @@
 package com.airship.sample.preferencecenter
 
-import android.content.Context
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.viewinterop.AndroidViewBinding
-import androidx.fragment.app.FragmentActivity
-import androidx.glance.LocalContext
-import com.urbanairship.preferencecenter.ui.PreferenceCenterFragment
-import com.airship.sample.R
-import com.airship.sample.databinding.FragmentPreferenceCenterBinding
+import com.urbanairship.preferencecenter.compose.ui.PreferenceCenterDefaults
+import com.urbanairship.preferencecenter.compose.ui.PreferenceCenterScreen
+import com.urbanairship.preferencecenter.compose.ui.theme.PreferenceCenterColors
+import com.urbanairship.preferencecenter.compose.ui.theme.PreferenceCenterTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PreferenceCenterScreen(
-    modifier: Modifier = Modifier,
-    context: Context
-) {
-    Scaffold(topBar = {
-        TopAppBar(
-            title = {
-                Text(text = "Preference Center")
+fun PreferenceCenterScreen(identifier: String) {
+    val lightColors = PreferenceCenterColors.lightDefaults(
+        background = MaterialTheme.colorScheme.surfaceContainer,
+        surface = MaterialTheme.colorScheme.surface,
+        accent = MaterialTheme.colorScheme.primary,
+        divider = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
+        error = MaterialTheme.colorScheme.error
+    )
+
+    val darkColors = PreferenceCenterColors.darkDefaults(
+        background = MaterialTheme.colorScheme.surfaceContainer,
+        surface = MaterialTheme.colorScheme.surface,
+        accent = MaterialTheme.colorScheme.primary,
+        divider = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
+        error = MaterialTheme.colorScheme.error
+    )
+
+    PreferenceCenterTheme(
+        colors = if (isSystemInDarkTheme()) darkColors else lightColors
+    ) {
+        PreferenceCenterScreen(
+            identifier = identifier,
+            topBar = { title, _ ->
+                PreferenceCenterDefaults.topBar(
+                    title = title,
+                    navIcon = null,
+                    onNavigateUp = {}
+                )
             }
         )
-    }, modifier = modifier) { paddingValues ->
-        Surface(Modifier.padding(paddingValues)) {
-            AndroidViewBinding(FragmentPreferenceCenterBinding::inflate) {
-                val fragmentManager = (context as FragmentActivity).supportFragmentManager
-
-                if (fragmentManager.findFragmentById(R.id.preference_center_fragment_container_view) == null) {
-                    val fragment = PreferenceCenterFragment.create("app_default")
-                    fragmentManager.beginTransaction()
-                        .add(R.id.preference_center_fragment_container_view, fragment).commit()
-                }
-            }
-        }
     }
 }

@@ -8,16 +8,15 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.RemoteViews;
 
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.NotificationTarget;
 import com.urbanairship.json.JsonMap;
 import com.urbanairship.liveupdate.CallbackLiveUpdateNotificationHandler;
 import com.urbanairship.liveupdate.LiveUpdate;
 import com.urbanairship.liveupdate.LiveUpdateEvent;
-import com.urbanairship.util.PendingIntentCompat;
-
-import androidx.annotation.NonNull;
-import androidx.core.app.NotificationCompat;
 
 /**
  * Sample sports live update handler, with support for loading team images via Glide, in the
@@ -68,7 +67,7 @@ public class SampleLiveUpdate implements CallbackLiveUpdateNotificationHandler {
                                      .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP)
                                      .setPackage(null);
 
-        PendingIntent contentIntent = PendingIntentCompat.getActivity(
+        PendingIntent contentIntent = PendingIntent.getActivity(
                 context, 0, launchIntent, PendingIntent.FLAG_IMMUTABLE);
 
         NotificationCompat.Builder builder =

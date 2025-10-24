@@ -4,6 +4,8 @@ package com.airship.sample;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.urbanairship.channel.AirshipChannelListener;
 import com.urbanairship.push.NotificationActionButtonInfo;
 import com.urbanairship.push.NotificationInfo;
@@ -11,8 +13,6 @@ import com.urbanairship.push.NotificationListener;
 import com.urbanairship.push.PushListener;
 import com.urbanairship.push.PushMessage;
 import com.urbanairship.push.PushTokenListener;
-
-import androidx.annotation.NonNull;
 
 /**
  * Listener for push, notifications, and registrations events.
@@ -51,7 +51,7 @@ public class AirshipListener implements PushListener, NotificationListener, Push
 
     @Override
     public void onNotificationDismissed(@NonNull NotificationInfo notificationInfo) {
-        Log.i(TAG, "Notification dismissed. Alert: " + notificationInfo.getMessage().getAlert() + ". Notification ID: " + notificationInfo.getNotificationId());
+        Log.i(TAG, "Notification dismissed. Alert: " + notificationInfo.message.getAlert() + ". Notification ID: " + notificationInfo.notificationId);
     }
 
     @Override

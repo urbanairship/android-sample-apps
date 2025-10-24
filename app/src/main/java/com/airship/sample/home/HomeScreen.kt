@@ -1,5 +1,6 @@
 package com.airship.sample.home
 
+import AirshipTheme
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -32,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -39,9 +41,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.airship.sample.AppRouterViewModel
 import com.airship.sample.Destination
-import com.urbanairship.messagecenter.Message
 import com.airship.sample.R
-import AirshipTheme
+import com.urbanairship.messagecenter.Message
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -59,17 +60,17 @@ internal fun HomeScreen(
     val namedUserId = viewModel.namedUserId.collectAsState().value
     val unreadCount by viewModel.unreadMessageCount.collectAsState(initial = emptyList())
     val context = LocalContext.current
+    val resources = LocalResources.current
 
     LaunchedEffect(unreadCount) {
         if (unreadCount.isNotEmpty()) {
             val result = snackbarHostState.showSnackbar(
-                message = context.resources.getQuantityString
-                    (R.plurals.mc_indicator_text, unreadCount.size, unreadCount.size),
+                message = resources.getQuantityString(R.plurals.mc_indicator_text, unreadCount.size, unreadCount.size),
                 actionLabel = "View",
                 duration = SnackbarDuration.Long
             )
             if (result == SnackbarResult.ActionPerformed) {
-                onNavigate(AppRouterViewModel.TopLevelDestination.MESSAGE)
+                onNavigate(AppRouterViewModel.TopLevelDestination.MessageCenter())
             }
         }
     }

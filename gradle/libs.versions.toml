@@ -1,35 +1,34 @@
 [versions]
-agp = "8.12.3"
-airship = "19.13.3"
+agp = "8.13.0"
+airship = "20.0.1"
 
 # AndroidX
-androidx-activity-compose = '1.10.1'
-androidx-lifecycle = '2.9.1'
+androidx-activity-compose = '1.11.0'
+androidx-lifecycle = '2.9.4'
 androidx-appcompat = '1.7.1'
 androidx-core = '1.17.0'
 
 # Compose
-compose-bom = '2025.06.01'
+compose-bom = '2025.10.01'
 
 # Glance
 androidx-glance = '1.1.1'
 
 # Kotlin
-kotlin = "2.0.21"
-kotlinx-serialization = '1.6.3'
+kotlin = "2.2.21"
+kotlinx-serialization = '1.9.0'
 
 # Navigation3
-nav3Core = "1.0.0-alpha10"
+nav3Core = "1.0.0-alpha11"
 lifecycleViewmodelNav3 = "1.0.0-alpha04"
-fragmentCompose = "1.8.9"
 
 [libraries]
 # Airship
 airship-fcm = { module = "com.urbanairship.android:urbanairship-fcm", version.ref = "airship" }
-airship-preferencecenter = { module = "com.urbanairship.android:urbanairship-preference-center", version.ref = "airship" }
-airship-messagecenter = { module = "com.urbanairship.android:urbanairship-message-center", version.ref = "airship" }
+airship-preferencecenter-compose = { module = "com.urbanairship.android:urbanairship-preference-center-compose", version.ref = "airship" }
+airship-messagecenter-compose = { module = "com.urbanairship.android:urbanairship-message-center-compose", version.ref = "airship" }
 airship-liveupdate = { module = "com.urbanairship.android:urbanairship-live-update", version.ref = "airship" }
-airship-automation = { module = "com.urbanairship.android:urbanairship-automation", version.ref = "airship" }
+airship-automation-compose = { module = "com.urbanairship.android:urbanairship-automation-compose", version.ref = "airship" }
 airship-debug = { module = "com.urbanairship.android:urbanairship-debug", version.ref = "airship" }
 
 # AndroidX
