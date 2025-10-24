@@ -1,7 +1,6 @@
 package com.airship.sample.preferencecenter
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import com.urbanairship.preferencecenter.compose.ui.PreferenceCenterScreen

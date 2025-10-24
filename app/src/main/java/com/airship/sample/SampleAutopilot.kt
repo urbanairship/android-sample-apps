@@ -1,18 +1,8 @@
 /* Copyright Airship and Contributors */
 package com.airship.sample
 
-import android.content.Context
-import android.content.Context.MODE_PRIVATE
-import android.content.Intent
-import androidx.core.app.NotificationChannelCompat
-import androidx.core.app.NotificationManagerCompat
-import androidx.core.net.toUri
-import com.urbanairship.AirshipConfigOptions
-import com.urbanairship.Autopilot
 //import com.urbanairship.Airship
-import com.urbanairship.liveupdate.LiveUpdateManager
-import com.urbanairship.messagecenter.MessageCenter
-import com.airship.sample.glance.SampleAppWidgetLiveUpdate
+import com.urbanairship.Autopilot
 
 /**
  * Autopilot that enables user notifications on first run.

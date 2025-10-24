@@ -5,11 +5,11 @@ import android.util.Log
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.appwidget.updateAll
+import com.airship.sample.glance.SampleAppWidget.Companion.dataPrefKey
 import com.urbanairship.liveupdate.LiveUpdate
 import com.urbanairship.liveupdate.LiveUpdateEvent
 import com.urbanairship.liveupdate.LiveUpdateResult
 import com.urbanairship.liveupdate.SuspendLiveUpdateCustomHandler
-import com.airship.sample.glance.SampleAppWidget.Companion.dataPrefKey
 
 /**
  * A custom live update handler that updates the content of the SampleAppWidget.

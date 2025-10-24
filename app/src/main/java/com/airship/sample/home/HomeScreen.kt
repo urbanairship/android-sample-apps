@@ -1,5 +1,6 @@
 package com.airship.sample.home
 
+import AirshipTheme
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -39,9 +40,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.airship.sample.AppRouterViewModel
 import com.airship.sample.Destination
-import com.urbanairship.messagecenter.Message
 import com.airship.sample.R
-import AirshipTheme
+import com.urbanairship.messagecenter.Message
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
