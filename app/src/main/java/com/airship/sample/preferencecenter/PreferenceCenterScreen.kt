@@ -3,6 +3,7 @@ package com.airship.sample.preferencecenter
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import com.urbanairship.preferencecenter.compose.ui.PreferenceCenterDefaults
 import com.urbanairship.preferencecenter.compose.ui.PreferenceCenterScreen
 import com.urbanairship.preferencecenter.compose.ui.theme.PreferenceCenterColors
 import com.urbanairship.preferencecenter.compose.ui.theme.PreferenceCenterTheme
@@ -28,6 +29,15 @@ fun PreferenceCenterScreen(identifier: String) {
     PreferenceCenterTheme(
         colors = if (isSystemInDarkTheme()) darkColors else lightColors
     ) {
-        PreferenceCenterScreen(identifier = identifier)
+        PreferenceCenterScreen(
+            identifier = identifier,
+            topBar = { title, _ ->
+                PreferenceCenterDefaults.topBar(
+                    title = title,
+                    navIcon = null,
+                    onNavigateUp = {}
+                )
+            }
+        )
     }
 }
