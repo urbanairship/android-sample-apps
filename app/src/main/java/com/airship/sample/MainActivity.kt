@@ -74,9 +74,9 @@ class MainActivity : AppCompatActivity() {
                     },
                 ) { innerPadding ->
                     Box(
-                        modifier = Modifier
-                            .padding(bottom = innerPadding.calculateBottomPadding())
-                            .fillMaxSize()
+                        modifier = Modifier.fillMaxSize()
+                            .padding(innerPadding)
+                            .consumeWindowInsets(innerPadding)
                     ) {
                         NavDisplay(
                             backStack = backstack,
