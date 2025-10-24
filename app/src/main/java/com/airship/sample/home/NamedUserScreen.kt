@@ -35,6 +35,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.urbanairship.UAirship
 import com.airship.sample.R
 import com.airship.sample.ui.theme.PreviewTheme
+import com.urbanairship.Airship
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -99,13 +100,13 @@ internal class NamedUserViewModel: ViewModel() {
     val userId = mutableStateOf("")
 
     init {
-        UAirship.shared {
-            userId.value = it.contact.namedUserId ?: ""
+        Airship.onReady {
+            userId.value = contact.namedUserId ?: ""
         }
     }
 
     fun save() {
-        if (!UAirship.isFlying()) {
+        if (!Airship.isFlying) {
             return
         }
 

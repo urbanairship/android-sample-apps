@@ -2,7 +2,6 @@ package com.airship.sample
 
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.runtime.toMutableStateList
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -157,7 +156,7 @@ class AppRouterViewModel(
                     HomeScreen(onNavigate)
                 }
                 MESSAGE -> NavEntry(this) {
-                    InboxScreen(onMessageSelected = {})
+                    InboxScreen()
                 }
                 PREFERENCE_CENTER -> NavEntry(this) {
                     PreferenceCenterScreen("app_default")
