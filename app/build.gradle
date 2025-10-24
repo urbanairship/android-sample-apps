@@ -1,0 +1,80 @@
+plugins {
+    id 'kotlin-android'
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.compose.compiler)
+}
+
+android {
+    namespace 'com.airship.sample'
+    compileSdk = 36
+
+    defaultConfig {
+        applicationId "com.airship.sample"
+        minSdk 24
+        targetSdk 36
+        versionCode 1
+        versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildFeatures {
+        viewBinding = true
+        buildConfig true
+        compose = true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_11
+    }
+}
+
+dependencies {
+    // Kotlin
+    implementation(libs.kotlinx.serialization.json)
+
+    //Airship
+    debugImplementation(libs.airship.fcm)
+    debugImplementation(libs.airship.messagecenter)
+    debugImplementation(libs.airship.preferencecenter)
+    debugImplementation(libs.airship.liveupdate)
+    debugImplementation(libs.airship.automation)
+//    implementation(libs.airship.debug)
+
+    // AndroidX
+    implementation(libs.androidx.core)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+    // Compose
+    implementation(platform(libs.compose.bom))
+    implementation(libs.compose.ui)
+    implementation(libs.compose.material3)
+    implementation(libs.compose.ui.viewbinding)
+    implementation(libs.compose.ui.tooling)
+
+    // Glance
+    implementation(libs.glance.appwidget)
+}
+
+def googleServicesFile = rootProject.file('sample/google-services.json')
+if (googleServicesFile.exists()) {
+    apply plugin: 'com.google.gms.google-services'  // Google Play services Gradle plugin
+}
