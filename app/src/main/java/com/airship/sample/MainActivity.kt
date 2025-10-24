@@ -22,13 +22,16 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.core.util.Consumer
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.airship.sample.AppRouterViewModel.TopLevelDestination
 import com.urbanairship.google.PlayServicesUtils.handleAnyPlayServicesError
 import com.urbanairship.google.PlayServicesUtils.isGooglePlayStoreAvailable
 
@@ -36,6 +39,20 @@ import com.urbanairship.google.PlayServicesUtils.isGooglePlayStoreAvailable
  * Main application entry point.
  */
 class MainActivity : AppCompatActivity() {
+    fun TopLevelDestination.title(): String = when(this) {
+        is TopLevelDestination.Home -> "Home"
+        is TopLevelDestination.MessageCenter -> "Messages"
+        is TopLevelDestination.PreferenceCenter -> "Preferences"
+        is TopLevelDestination.Settings -> "Settings"
+    }
+
+    fun TopLevelDestination.icon(): ImageVector = when(this) {
+        is TopLevelDestination.Home -> Icons.Filled.Home
+        is TopLevelDestination.MessageCenter -> Icons.Filled.MailOutline
+        is TopLevelDestination.PreferenceCenter -> Icons.Filled.Notifications
+        is TopLevelDestination.Settings -> Icons.Filled.Settings
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         this.enableEdgeToEdge()
         super.onCreate(savedInstanceState)
@@ -46,6 +63,8 @@ class MainActivity : AppCompatActivity() {
                 factory = AppRouterViewModel.factory()
             )
 
+            DeeplinkHandler.shared.setAppRouter(appRouter)
+
             val activeTab = appRouter.selectedTopLevel.collectAsState().value
             val backstack = appRouter.activeBackStack.collectAsState().value
 
@@ -53,7 +72,7 @@ class MainActivity : AppCompatActivity() {
                 Scaffold(
                     bottomBar = {
                         NavigationBar {
-                            AppRouterViewModel.TopLevelDestination.entries.forEach { item ->
+                            TopLevelDestination.entries.forEach { item ->
                                 val selected = activeTab == item
 
                                 NavigationBarItem(
@@ -91,27 +110,21 @@ class MainActivity : AppCompatActivity() {
                                 appRouter.navigationEntry(key)
                             })
                     }
+                }
 
+                // Listen for new intents that may contain deep links
+                DisposableEffect(appRouter) {
+                    DeeplinkHandler.shared.handle(intent)
+
+                    val listener = Consumer<Intent> {
+                        DeeplinkHandler.shared.handle(it)
+                    }
+
+                    addOnNewIntentListener(listener)
+                    onDispose { removeOnNewIntentListener(listener) }
                 }
             }
         }
-
-        // Enable webview debugging via Chrome for debug builds.
-        if (0 != applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE) {
-            WebView.setWebContentsDebuggingEnabled(true)
-        }
-    }
-
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-    }
-
-    public override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
     }
 
     public override fun onResume() {
@@ -120,28 +133,6 @@ class MainActivity : AppCompatActivity() {
         // Handle any Google Play services errors
         if (isGooglePlayStoreAvailable(this)) {
             handleAnyPlayServicesError(this)
-        }
-    }
-
-    public override fun onPause() {
-        super.onPause()
-    }
-
-    fun AppRouterViewModel.TopLevelDestination.title(): String {
-        return when(this) {
-            AppRouterViewModel.TopLevelDestination.HOME -> "Home"
-            AppRouterViewModel.TopLevelDestination.MESSAGE -> "Messages"
-            AppRouterViewModel.TopLevelDestination.PREFERENCE_CENTER -> "Preferences"
-            AppRouterViewModel.TopLevelDestination.SETTINGS -> "Settings"
-        }
-    }
-
-    fun AppRouterViewModel.TopLevelDestination.icon(): ImageVector {
-        return when(this) {
-            AppRouterViewModel.TopLevelDestination.HOME -> Icons.Filled.Home
-            AppRouterViewModel.TopLevelDestination.MESSAGE -> Icons.Filled.MailOutline
-            AppRouterViewModel.TopLevelDestination.PREFERENCE_CENTER -> Icons.Filled.Notifications
-            AppRouterViewModel.TopLevelDestination.SETTINGS -> Icons.Filled.Settings
         }
     }
 }

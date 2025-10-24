@@ -15,11 +15,12 @@ import com.airship.sample.home.HomeScreen
 import com.airship.sample.home.QuickAccess
 import com.airship.sample.inbox.InboxScreen
 import com.airship.sample.preferencecenter.PreferenceCenterScreen
+import com.urbanairship.messagecenter.compose.ui.rememberMessageCenterState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.serialization.Serializable
+import java.io.Serializable
 
 interface Destination: NavKey {
     fun serialize(): String
@@ -52,7 +53,7 @@ class AppRouterViewModel(
         val selected = savedStateHandle
             .get<String>(ACTIVE_TOP_LEVEL_ITEM)
             ?.let(TopLevelDestination::restore)
-            ?: TopLevelDestination.HOME
+            ?: TopLevelDestination.Home
         _selectedItem = MutableStateFlow(selected)
 
         val saved = savedStateHandle.get<Map<String, List<String>>>(NAV_STACK_KEY) ?: emptyMap()
@@ -106,6 +107,20 @@ class AppRouterViewModel(
         saveState()
     }
 
+    fun navigateStack(stack: List<Destination>) {
+        if (stack.isEmpty()) {
+            return
+        }
+
+        val topLevel = (stack.first() as? TopLevelDestination) ?: return
+
+        changeTopLevel(topLevel)
+        _activeBackStack.update { stack.toMutableStateList() }
+        backStacks.update {
+            it.toMutableMap().apply { put(selectedTopLevel.value, _activeBackStack.value) }.toMap()
+        }
+    }
+
     fun navigationEntry(destination: Destination): NavEntry<Destination> {
         return destination.navigationEntry(
             onNavigate = { navigate(it) },
@@ -138,12 +153,25 @@ class AppRouterViewModel(
         }
     }
 
-    @Serializable
-    enum class TopLevelDestination(private val value: String): Destination {
-        HOME("home"),
-        MESSAGE("message"),
-        PREFERENCE_CENTER("preference"),
-        SETTINGS("settings");
+    sealed class TopLevelDestination(private val value: String): Destination, Serializable {
+        data object Home : TopLevelDestination("home")
+
+        data class MessageCenter(
+            val messageId: String? = null
+        ): TopLevelDestination(NAME) {
+            override fun serialize(): String {
+                val message = messageId ?: return NAME
+                return "$NAME/$message"
+            }
+
+            companion object {
+                const val NAME = "message"
+            }
+        }
+
+        data object PreferenceCenter : TopLevelDestination("preference")
+
+        data object Settings : TopLevelDestination("settings")
 
         override fun serialize(): String  = this.value
 
@@ -152,24 +180,45 @@ class AppRouterViewModel(
             onPopBackStack: () -> Unit,
         ): NavEntry<Destination> {
             return when (this) {
-                HOME -> NavEntry(this) {
+                is Home -> NavEntry(this) {
                     HomeScreen(onNavigate)
                 }
-                MESSAGE -> NavEntry(this) {
-                    InboxScreen()
+                is MessageCenter -> NavEntry(this) {
+                    InboxScreen(
+                        state = rememberMessageCenterState(messageId = messageId)
+                    )
                 }
-                PREFERENCE_CENTER -> NavEntry(this) {
+                is PreferenceCenter -> NavEntry(this) {
                     PreferenceCenterScreen("app_default")
                 }
-                SETTINGS -> NavEntry(this) {
+                is Settings -> NavEntry(this) {
                     DebugScreen()
                 }
             }
         }
 
         companion object {
+
+            val entries = listOf(Home, MessageCenter(), PreferenceCenter, Settings)
+
             fun restore(saved: String): TopLevelDestination? {
-                return entries.firstOrNull { it.serialize() == saved }
+                val parts = saved.split("/").toMutableList()
+                if (parts.isEmpty()) {
+                    return null
+                }
+
+                val top = parts.removeAt(0)
+                if (parts.isEmpty()) {
+                    return entries.firstOrNull { it.serialize() == top }
+                }
+
+                when(top) {
+                    MessageCenter.NAME -> {
+                        val messageId = parts.removeAt(0)
+                        return MessageCenter(messageId)
+                    }
+                    else -> { return null }
+                }
             }
         }
     }
