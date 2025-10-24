@@ -47,12 +47,15 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     //Airship
-    debugImplementation(libs.airship.fcm)
-    debugImplementation(libs.airship.messagecenter)
-    debugImplementation(libs.airship.preferencecenter)
-    debugImplementation(libs.airship.liveupdate)
-    debugImplementation(libs.airship.automation)
-//    implementation(libs.airship.debug)
+    implementation(libs.airship.fcm)
+    implementation(libs.airship.messagecenter)
+    implementation(libs.airship.preferencecenter)
+    implementation(libs.airship.liveupdate)
+    implementation(libs.airship.automation)
+    // Included as an implementation dependency so that we can embed the debug screen as a tab
+    // in our sample app. Apps that do not wish to embed the debug screen can omit this dependency
+    // or use debugImplementation instead.
+    implementation(libs.airship.debug)
 
     // AndroidX
     implementation(libs.androidx.core)
