@@ -1,16 +1,22 @@
-package com.airship.sample.preferencecenter
+package com.airship.sample.messagecenter
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import com.urbanairship.preferencecenter.compose.ui.PreferenceCenterScreen
-import com.urbanairship.preferencecenter.compose.ui.theme.PreferenceCenterColors
-import com.urbanairship.preferencecenter.compose.ui.theme.PreferenceCenterTheme
+import com.urbanairship.messagecenter.compose.ui.MessageCenterScreen
+import com.urbanairship.messagecenter.compose.ui.MessageCenterState
+import com.urbanairship.messagecenter.compose.ui.rememberMessageCenterState
+import com.urbanairship.messagecenter.compose.ui.theme.MessageCenterColors
+import com.urbanairship.messagecenter.compose.ui.theme.MessageCenterTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PreferenceCenterScreen(identifier: String) {
-    val lightColors = PreferenceCenterColors.lightDefaults(
+fun MessageCenterScreen(
+    state: MessageCenterState = rememberMessageCenterState(),
+) {
+
+    val lightColors = MessageCenterColors.lightDefaults(
         background = MaterialTheme.colorScheme.surfaceContainer,
         surface = MaterialTheme.colorScheme.surface,
         accent = MaterialTheme.colorScheme.primary,
@@ -18,7 +24,7 @@ fun PreferenceCenterScreen(identifier: String) {
         error = MaterialTheme.colorScheme.error
     )
 
-    val darkColors = PreferenceCenterColors.darkDefaults(
+    val darkColors = MessageCenterColors.darkDefaults(
         background = MaterialTheme.colorScheme.surfaceContainer,
         surface = MaterialTheme.colorScheme.surface,
         accent = MaterialTheme.colorScheme.primary,
@@ -26,9 +32,9 @@ fun PreferenceCenterScreen(identifier: String) {
         error = MaterialTheme.colorScheme.error
     )
 
-    PreferenceCenterTheme(
+    MessageCenterTheme(
         colors = if (isSystemInDarkTheme()) darkColors else lightColors
     ) {
-        PreferenceCenterScreen(identifier = identifier)
+        MessageCenterScreen(state = state)
     }
 }

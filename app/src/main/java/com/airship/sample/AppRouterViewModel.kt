@@ -160,7 +160,7 @@ class AppRouterViewModel(
                     InboxScreen(onMessageSelected = {})
                 }
                 PREFERENCE_CENTER -> NavEntry(this) {
-                    PreferenceCenterScreen(context = LocalContext.current)
+                    PreferenceCenterScreen("app_default")
                 }
                 SETTINGS -> NavEntry(this) {
                     DebugScreen()
