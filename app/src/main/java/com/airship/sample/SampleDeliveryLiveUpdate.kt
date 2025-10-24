@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.graphics.drawable.IconCompat
 import com.bumptech.glide.Glide
+
 import com.urbanairship.UALog
 import com.urbanairship.json.JsonException
 import com.urbanairship.json.JsonMap
@@ -100,7 +101,7 @@ class SampleDeliveryLiveUpdate : CallbackLiveUpdateNotificationHandler {
                 ?.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 ?.setPackage(null)
 
-            val contentIntent = PendingIntentCompat.getActivity(
+            val contentIntent = PendingIntent.getActivity(
                 context, 0, launchIntent, PendingIntent.FLAG_IMMUTABLE
             )
 
@@ -154,14 +155,15 @@ class SampleDeliveryLiveUpdate : CallbackLiveUpdateNotificationHandler {
             .setStyledByProgress(true)
             .setProgress(stopLength*currentStop)
             .setProgressTrackerIcon(IconCompat.createWithResource(context, com.urbanairship.R.drawable.ua_ic_notification_button_send))
-            createAndSetProgressSegments(progressStyle, stops, stopLength)
+
+        createAndSetProgressSegments(progressStyle, stops, stopLength)
 
         return progressStyle
     }
 
     @RequiresApi(Build.VERSION_CODES.BAKLAVA)
     fun createAndSetProgressSegments(progressStyle: NotificationCompat.ProgressStyle, stops: Int, stopLength: Int) : NotificationCompat.ProgressStyle {
-        var segmentsList = ArrayList<NotificationCompat.ProgressStyle.Segment>()
+        val segmentsList = ArrayList<NotificationCompat.ProgressStyle.Segment>()
         for (i in 1..stops) {
             segmentsList.add(NotificationCompat.ProgressStyle.Segment(stopLength).setColor(Color.BLUE))
         }

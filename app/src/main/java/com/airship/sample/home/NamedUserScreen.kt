@@ -30,7 +30,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.airship.sample.R
 import com.airship.sample.ui.theme.PreviewTheme
 import com.urbanairship.Airship
-import com.urbanairship.UAirship
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -108,9 +107,9 @@ internal class NamedUserViewModel: ViewModel() {
         val update = userId.value.trim()
 
         if (update.isEmpty()) {
-            UAirship.shared().contact.reset()
+            Airship.contact.reset()
         } else {
-            UAirship.shared().contact.identify(update)
+            Airship.contact.identify(update)
         }
     }
 }
