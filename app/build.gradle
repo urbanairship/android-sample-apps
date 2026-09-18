@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "com.airship.sample"
-        minSdk 24
+        minSdk 26
         targetSdk 36
         versionCode 1
         versionName "1.0"
@@ -60,6 +60,9 @@ dependencies {
     // AndroidX
     implementation(libs.androidx.core)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.coordinatorlayout)
+    implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.navigation3.runtime)
     implementation(libs.androidx.navigation3.ui)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
@@ -70,11 +73,18 @@ dependencies {
     implementation(platform(libs.compose.bom))
     implementation(libs.compose.ui)
     implementation(libs.compose.material3)
+    implementation(libs.compose.material.icons.core)
     implementation(libs.compose.ui.viewbinding)
     implementation(libs.compose.ui.tooling)
 
     // Glance
     implementation(libs.glance.appwidget)
+
+    // Glide
+    implementation(libs.glide)
+
+    // Google
+    implementation(libs.google.material)
 }
 
 def googleServicesFile = rootProject.file('app/google-services.json')
